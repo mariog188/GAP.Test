@@ -1,14 +1,13 @@
-﻿using System;
+﻿using GAP.Test.Domain.Core.Base;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace GAP.Test.Domain.Model
 {
-    public enum TipoRiesgo
+    public class TipoRiesgo : Entity<int>
     {
-        BAJO = 1,
-        MEDIO,
-        MEDIO_ALTO,
-        ALTO
+        public string Descripcion { get; set; }
+        public ICollection<Poliza> Polizas { get; set; }
     }
 }
