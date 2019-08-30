@@ -1,9 +1,13 @@
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
+using AutoMapper;
 using GAP.Test.Domain.Core.Base;
 using GAP.Test.Domain.Core.Contracts;
 using GAP.Test.Domain.Infraestructure;
+using GAP.Test.Front.Application.Services;
+using GAP.Test.Front.Application.Services.Contracts;
 using GAP.Test.Front.Infrastructure;
+using GAP.Test.Front.Infrastructure.Helper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -30,11 +34,11 @@ namespace GAP.Test.Front
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-            //var mappingConfig = new MapperConfiguration(mc =>
-            //{
-            //    mc.AddProfile(new MappingProfile());
-            //});
-            //IMapper mapper = mappingConfig.CreateMapper();
+            var mappingConfig = new MapperConfiguration(mc =>
+            {
+                mc.AddProfile(new MappingProfile());
+            });
+            IMapper mapper = mappingConfig.CreateMapper();
             services.AddEntityFrameworkMySql().AddDbContext<TestContext>(options =>
             {
                 options.UseMySql(Configuration.GetSection("ConnectionString").Value,
@@ -45,6 +49,7 @@ namespace GAP.Test.Front
             }, ServiceLifetime.Scoped);
             services.AddScoped<IDbContext, TestContext>();
             services.AddTransient<IUnitOfWork, UnitOfWork>();
+            services.AddTransient<IPolizaService, PolizaService>();
             // In production, the Angular files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {
