@@ -1,13 +1,19 @@
+using Autofac;
+using Autofac.Extensions.DependencyInjection;
 using GAP.Test.Domain.Core.Base;
 using GAP.Test.Domain.Core.Contracts;
 using GAP.Test.Domain.Infraestructure;
+using GAP.Test.Front.Infrastructure;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using System;
 
 namespace GAP.Test.Front
 {
@@ -21,14 +27,14 @@ namespace GAP.Test.Front
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
+        public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-            var mappingConfig = new MapperConfiguration(mc =>
-            {
-                mc.AddProfile(new MappingProfile());
-            });
-            IMapper mapper = mappingConfig.CreateMapper();
+            //var mappingConfig = new MapperConfiguration(mc =>
+            //{
+            //    mc.AddProfile(new MappingProfile());
+            //});
+            //IMapper mapper = mappingConfig.CreateMapper();
             services.AddEntityFrameworkMySql().AddDbContext<TestContext>(options =>
             {
                 options.UseMySql(Configuration.GetSection("ConnectionString").Value,
@@ -44,6 +50,9 @@ namespace GAP.Test.Front
             {
                 configuration.RootPath = "ClientApp/dist";
             });
+            var container = new ContainerBuilder();
+            container.Populate(services);
+            return new AutofacServiceProvider(container.Build());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -59,14 +68,7 @@ namespace GAP.Test.Front
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-            var context = (TestContext)app.ApplicationServices.GetService(typeof(TestContext));
-            if (!context.AllMigrationsApplied())
-            {
-                context.Database.Migrate();
-                context.EnsureSeed(app.ApplicationServices.GetService<IOptions<OrderingSettings>>(),
-                                   app.ApplicationServices.GetService<IHostingEnvironment>(),
-                                   app.ApplicationServices.GetService<ILogger<TestContext>>());
-            }
+
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
@@ -78,6 +80,14 @@ namespace GAP.Test.Front
                     name: "default",
                     template: "{controller}/{action=Index}/{id?}");
             });
+
+            var context = (TestContext)app.ApplicationServices.GetService(typeof(TestContext));
+            if (!context.AllMigrationsApplied())
+            {
+                context.Database.Migrate();
+                context.EnsureSeed(app.ApplicationServices.GetService<IHostingEnvironment>(),
+                                   app.ApplicationServices.GetService<ILogger<TestContext>>());
+            }
 
             app.UseSpa(spa =>
             {

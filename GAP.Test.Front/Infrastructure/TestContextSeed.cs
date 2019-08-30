@@ -1,8 +1,12 @@
 ﻿using GAP.Test.Domain.Infraestructure;
+using GAP.Test.Front.Infrastructure.Seeds;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.Logging;
+using MySql.Data.MySqlClient;
+using Polly;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -44,28 +48,19 @@ namespace GAP.Test.Front.Infrastructure
             seedPolicy.Execute(() =>
             {
 
-                if (!context.Categories.Any())
+                if (!context.Clientes.Any())
                 {
-                    context.Categories.AddRange(useSampleData ? CategorySeed.GetSampleCategories() :
-                                                                CategorySeed.GetCategoriesFromFile(environment.ContentRootPath, logger));
+                    context.Clientes.AddRange(ClienteSeed.GetSampleCliente() );
                 }
 
-                if (!context.TrajectoryStatus.Any())
+                if (!context.TiposCubrimientos.Any())
                 {
-                    context.TrajectoryStatus.AddRange(useSampleData ? OrderTrajectoryStatusSeed.GetSampleStatuses() :
-                                                              OrderTrajectoryStatusSeed.GetOrderStatusesFromFile(environment.ContentRootPath, logger));
+                    context.TiposCubrimientos.AddRange(TipoCubrimientoSeed.GetSampleTipoCubrimiento());
                 }
 
-                if (!context.Types.Any())
+                if (!context.TiposRiesgos.Any())
                 {
-                    context.Types.AddRange(useSampleData ? OrderTypeSeed.GetSampleStatuses() :
-                                                               OrderTypeSeed.GetSampleStatuses());
-                }
-
-                if (!context.Status.Any())
-                {
-                    context.Status.AddRange(useSampleData ? OrderStatusSeed.GetSampleStatuses() :
-                                                               OrderStatusSeed.GetSampleStatuses());
+                    context.TiposRiesgos.AddRange(TipoRiesgoSeed.GetSampleTipoRiesgo());
                 }
                 context.SaveChangesAsync();
             });
