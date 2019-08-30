@@ -16,5 +16,7 @@ namespace GAP.Test.Domain.Model
         public virtual TipoCubrimiento TipoCubrimiento { get; set; }
         public int IdTipoRiesgo { get; set; }
         public virtual TipoRiesgo TipoRiesgo { get; set; }
+        public int IdCliente { get; set; }
+        public virtual Cliente Cliente { get; set; }
     }
 }

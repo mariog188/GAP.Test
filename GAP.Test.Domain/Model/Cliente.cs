@@ -9,7 +9,7 @@ namespace GAP.Test.Domain.Model
     {
         public string  Nombre { get; set; }
 
-        public string Apellidp { get; set; }
+        public string Apellido { get; set; }
 
         public int Cedula { get; set; }
 

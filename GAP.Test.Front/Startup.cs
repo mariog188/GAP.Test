@@ -1,3 +1,6 @@
+using GAP.Test.Domain.Core.Base;
+using GAP.Test.Domain.Core.Contracts;
+using GAP.Test.Domain.Infraestructure;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -21,7 +24,21 @@ namespace GAP.Test.Front
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-
+            var mappingConfig = new MapperConfiguration(mc =>
+            {
+                mc.AddProfile(new MappingProfile());
+            });
+            IMapper mapper = mappingConfig.CreateMapper();
+            services.AddEntityFrameworkMySql().AddDbContext<TestContext>(options =>
+            {
+                options.UseMySql(Configuration.GetSection("ConnectionString").Value,
+                mySqlOptionsAction: mysqlOpt =>
+                {
+                    mysqlOpt.MigrationsAssembly(typeof(TestContext).Assembly.GetName().Name);
+                });
+            }, ServiceLifetime.Scoped);
+            services.AddScoped<IDbContext, TestContext>();
+            services.AddTransient<IUnitOfWork, UnitOfWork>();
             // In production, the Angular files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {
@@ -41,6 +58,14 @@ namespace GAP.Test.Front
                 app.UseExceptionHandler("/Error");
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
+            }
+            var context = (TestContext)app.ApplicationServices.GetService(typeof(TestContext));
+            if (!context.AllMigrationsApplied())
+            {
+                context.Database.Migrate();
+                context.EnsureSeed(app.ApplicationServices.GetService<IOptions<OrderingSettings>>(),
+                                   app.ApplicationServices.GetService<IHostingEnvironment>(),
+                                   app.ApplicationServices.GetService<ILogger<TestContext>>());
             }
 
             app.UseHttpsRedirection();
