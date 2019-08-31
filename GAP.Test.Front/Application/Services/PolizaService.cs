@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace GAP.Test.Front.Application.Services
 {
@@ -32,7 +33,7 @@ namespace GAP.Test.Front.Application.Services
         public async Task<List<PolizaVM>> GetAsync()
         {
             var repository = _unitOfWork.GetRepository<Domain.Model.Poliza>();
-            var polizas = await repository.GetAsync();
+            var polizas = await repository.GetAsync(include: source => source.Include(src => src.Cliente).Include(src => src.TipoCubrimiento).Include(src => src.TipoRiesgo));
             return _mapper.Map<List<PolizaVM>>(polizas);
         }
     }

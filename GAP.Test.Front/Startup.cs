@@ -39,6 +39,7 @@ namespace GAP.Test.Front
                 mc.AddProfile(new MappingProfile());
             });
             IMapper mapper = mappingConfig.CreateMapper();
+            services.AddSingleton(mapper);
             services.AddEntityFrameworkMySql().AddDbContext<TestContext>(options =>
             {
                 options.UseMySql(Configuration.GetSection("ConnectionString").Value,

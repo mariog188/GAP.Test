@@ -27,6 +27,7 @@ namespace GAP.Test.Domain.Infraestructure.EntityConfiguration
 
             builder.Property(item => item.FechaInicio)
                    .HasColumnName("fechainicio")
+                   .HasDefaultValue()
                    .IsRequired();
 
             builder.Property(item => item.PeriodoCobertura)

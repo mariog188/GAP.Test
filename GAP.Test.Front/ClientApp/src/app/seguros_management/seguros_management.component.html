@@ -1,3 +1,142 @@
-<p>
-  seguros_management works!
-</p>
+<table mat-table
+       [dataSource]="dataSource">
+
+  <ng-container matColumnDef="Cedula">
+    <th mat-header-cell
+        *matHeaderCellDef> Cedula </th>
+    <td mat-cell
+        *matCellDef="let element"> {{element.Cedula}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="Nombre">
+    <th mat-header-cell
+        *matHeaderCellDef> Nombre </th>
+    <td mat-cell
+        *matCellDef="let element"> {{element.Nombre}} </td>
+  </ng-container> 
+
+  <ng-container matColumnDef="Apellido">
+    <th mat-header-cell
+        *matHeaderCellDef> Apellido </th>
+    <td mat-cell
+        *matCellDef="let element"> {{element.Apellido}} </td>
+  </ng-container>
+<!-- 
+  <ng-container matColumnDef="Age">
+    <th mat-header-cell
+        *matHeaderCellDef> Age </th>
+    <td mat-cell
+        *matCellDef="let element"> {{element.Age}} </td>
+  </ng-container> -->
+
+  <ng-container matColumnDef="FechaInicio">
+    <th mat-header-cell
+        *matHeaderCellDef> FechaInicio </th>
+    <td mat-cell
+        *matCellDef="let element"> {{element.FechaInicio}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="PeriodoCobertura">
+    <th mat-header-cell
+        *matHeaderCellDef> Periodo Cobertura </th>
+    <td mat-cell
+        *matCellDef="let element"> {{element.PeriodoCobertura}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="Precio">
+    <th mat-header-cell
+        *matHeaderCellDef> Precio </th>
+    <td mat-cell
+        *matCellDef="let element"> {{element.Precio}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="TipoCobertura">
+    <th mat-header-cell
+        *matHeaderCellDef> Tipo Cobertura </th>
+    <td mat-cell
+        *matCellDef="let element"> {{element.TipoCobertura}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="TipoRiesgo">
+    <th mat-header-cell
+        *matHeaderCellDef> Tipo Riesgo </th>
+    <td mat-cell
+        *matCellDef="let element"> {{element.TipoRiesgo}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="actionsColumn">
+    <mat-header-cell *matHeaderCellDef>
+      <button mat-raised-button
+              color="primary"
+              (click)="createNew()">Create new</button>
+    </mat-header-cell>
+    <mat-cell *matCellDef="let row">
+      <button mat-raised-button
+              color="primary"
+              (click)="edit(row)">Edit</button>
+      <button mat-raised-button
+              color="primary"
+              (click)="delete(row)">Delete</button>
+    </mat-cell>
+  </ng-container>
+
+  <tr mat-header-row
+      *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row
+      *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>
+
+<ng-container *ngIf="showform">
+  <form [formGroup]="form"
+        (ngSubmit)="save()">
+
+    <mat-form-field>
+      <input matInput
+             placeholder="Cedula"
+             formControlName="cedula">
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput
+             placeholder="Nombre"
+             formControlName="nombre">
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput
+             placeholder="Apellido"
+             formControlName="apellido">
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput
+             placeholder="FechaInicio"
+             type="date"
+             formControlName="fechaInicio">
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput
+             placeholder="PeriodoCobertura"
+             formControlName="periodoCobertura">
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput
+             placeholder="Precio"
+             formControlName="precio">
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput
+             placeholder="TipoCobertura"
+             formControlName="tipoCobertura">
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput
+             placeholder="TipoRiesgo"
+             formControlName="tipoRiesgo">
+    </mat-form-field>
+    <br>
+    <br>
+    <button mat-raised-button
+            type="submit"
+            color="primary"
+            [disabled]="!form.valid">Save</button>
+  </form>
+</ng-container>
