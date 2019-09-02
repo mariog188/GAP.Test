@@ -1,7 +1,8 @@
 export interface Poliza {
+  IdPoliza: number;
   Cedula: number;
   Nombre: string;
-  Apellido: string;
+  Descripcion: string;
   FechaInicio: Date;
   PeriodoCobertura: number;
   Precio: number;

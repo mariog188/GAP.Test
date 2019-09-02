@@ -1,6 +1,13 @@
 <table mat-table
        [dataSource]="dataSource">
-
+       
+  <ng-container matColumnDef="IdPoliza">
+    <th mat-header-cell
+        *matHeaderCellDef> IdPoliza </th>
+    <td mat-cell
+        *matCellDef="let element"> {{element.IdPoliza}} </td>
+  </ng-container>
+       
   <ng-container matColumnDef="Cedula">
     <th mat-header-cell
         *matHeaderCellDef> Cedula </th>
@@ -15,19 +22,12 @@
         *matCellDef="let element"> {{element.Nombre}} </td>
   </ng-container> 
 
-  <ng-container matColumnDef="Apellido">
+  <ng-container matColumnDef="Descripcion">
     <th mat-header-cell
-        *matHeaderCellDef> Apellido </th>
+        *matHeaderCellDef> Descripcion </th>
     <td mat-cell
-        *matCellDef="let element"> {{element.Apellido}} </td>
+        *matCellDef="let element"> {{element.Descripcion}} </td>
   </ng-container>
-<!-- 
-  <ng-container matColumnDef="Age">
-    <th mat-header-cell
-        *matHeaderCellDef> Age </th>
-    <td mat-cell
-        *matCellDef="let element"> {{element.Age}} </td>
-  </ng-container> -->
 
   <ng-container matColumnDef="FechaInicio">
     <th mat-header-cell
@@ -89,21 +89,26 @@
 <ng-container *ngIf="showform">
   <form [formGroup]="form"
         (ngSubmit)="save()">
-
-    <mat-form-field>
+        
+    <mat-form-field floatPlaceholder="never">
+      <input matInput
+              placeholder="IdPoliza"
+              formControlName="idPoliza">
+    </mat-form-field>        
+    <mat-form-field floatPlaceholder="never">
       <input matInput
              placeholder="Cedula"
              formControlName="cedula">
     </mat-form-field>
     <mat-form-field>
       <input matInput
-             placeholder="Nombre"
+              placeholder="Nombre"
              formControlName="nombre">
     </mat-form-field>
     <mat-form-field>
       <input matInput
-             placeholder="Apellido"
-             formControlName="apellido">
+             placeholder="Descripcion"
+             formControlName="descripcion">
     </mat-form-field>
     <mat-form-field>
       <input matInput

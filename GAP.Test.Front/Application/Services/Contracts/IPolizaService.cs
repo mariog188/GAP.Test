@@ -11,6 +11,10 @@ namespace GAP.Test.Front.Application.Services.Contracts
     {
         bool CreatePoliza(PolizaVM polizaVM);
 
+        bool UpdatePoliza(PolizaVM polizaVM);
+        
         Task<List<PolizaVM>> GetAsync();
+
+        Task<bool> DeletePoliza(int idPoliza);
     }    
 }

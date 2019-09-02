@@ -1,1 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
+@import '@angular/material/prebuilt-themes/indigo-pink.css';
+
+.middle-cut .mat-form-field-should-float .mat-form-field-label-wrapper {display: none;}
+.middle-cut .mat-form-field-should-float .mat-form-field-infix {    margin-top: -10px;}
+.middle-cut .mat-form-field-infix  {border:0; padding-top:0; padding: .1375em 0; }
+.middle-cut .mat-form-field-label{top: 0.85em;}

@@ -15,19 +15,21 @@ export class Seguros_managementComponent implements OnInit {
 	url =  this.baseUrl + 'api/Poliza';
 	dataSource: MatTableDataSource<Poliza>;
 	displayedColumns: string[] = [
-		'Cedula',
-		'Nombre',
-		'Apellido',
-		'FechaInicio',
-		'PeriodoCobertura',
-		'Precio',
-		'TipoCobertura',
+	'IdPoliza'	,
+	'Cedula',
+	'Nombre',
+	'Descripcion',
+	'FechaInicio',
+	'PeriodoCobertura',
+	'Precio',
+	'TipoCobertura',
     'TipoRiesgo',
     'actionsColumn',
 	];
 	poliza: Poliza;
 	form: FormGroup;
 	showform = false;
+	update = false;
 
 
   constructor(
@@ -40,15 +42,16 @@ export class Seguros_managementComponent implements OnInit {
     debugger;
     this.getPolizas();
 		this.form = this.formbuilder.group({
-			cedula: [ null ],
-			nombre: [ '', [ Validators.required ] ],
-			apellido: [ '', [ Validators.required ] ],
-      periodoCobertura: [ '', [ Validators.required ] ],
-      precio: [ '', [ Validators.required ] ],
+		idPoliza: [ '', [ Validators.required ] ],
+		cedula: [ null ],
+		nombre: [ '', [ Validators.required ] ],
+		descripcion: [ '', [ Validators.required ] ],
+		periodoCobertura: [ '', [ Validators.required ] ],
+		precio: [ '', [ Validators.required ] ],
 			// age: [ 0, [ Validators.min(15), Validators.max(99) ] ],
-			fechaInicio: [ '', [ Validators.required ] ],
-      tipoCobertura: [ '', [ Validators.required ] ],
-      tipoRiesgo: [ '', [ Validators.required ] ],
+		fechaInicio: [ '', [ Validators.required ] ],
+		tipoCobertura: [ '', [ Validators.required ] ],
+		tipoRiesgo: [ '', [ Validators.required ] ],
 		});
   }
 
@@ -79,21 +82,24 @@ export class Seguros_managementComponent implements OnInit {
 	}
 
   createNew() {
+	this.update = false;
 		this.showform = !this.showform;
   }
   
   
 	edit(selectedPoliza: Poliza) {
+		this.update = true;
 		this.showform = true;
 		this.form.patchValue({
+			idPoliza: selectedPoliza.IdPoliza,
 			cedula: selectedPoliza.Cedula,
 			nombre: selectedPoliza.Nombre,
-			apellido: selectedPoliza.Apellido,
+			descripcion: selectedPoliza.Descripcion,
 			fechaInicio: selectedPoliza.FechaInicio,
 			periodoCobertura: selectedPoliza.PeriodoCobertura,
-      precio: selectedPoliza.Precio,
-      tipoCobertura: selectedPoliza.TipoCobertura,
-      tipoRiesgo: selectedPoliza.TipoRiesgo,
+			precio: selectedPoliza.Precio,
+			tipoCobertura: selectedPoliza.TipoCobertura,
+			tipoRiesgo: selectedPoliza.TipoRiesgo,
 		});
 	}
 
@@ -102,17 +108,20 @@ export class Seguros_managementComponent implements OnInit {
   }
   
   save() {
+	  debugger;
 		const poliza: Poliza = {
+			IdPoliza: this.form.get('idPoliza').value,
 			Cedula: this.form.get('cedula').value,
 			Nombre: this.form.get('nombre').value,
-			Apellido: this.form.get('apellido').value,
+			Descripcion: this.form.get('descripcion').value,
 			FechaInicio: this.form.get('fechaInicio').value,
 			PeriodoCobertura: this.form.get('periodoCobertura').value,
-      Precio: this.form.get('precio').value,
-      TipoCobertura: this.form.get('tipoCobertura').value,
-      TipoRiesgo: this.form.get('tipoRiesgo').value,
+			Precio: this.form.get('precio').value,
+			TipoCobertura: this.form.get('tipoCobertura').value,
+			TipoRiesgo: this.form.get('tipoRiesgo').value,
 		};
-		this.http
+		if (!this.update) {
+			this.http
 			.post(this.url, poliza)
 			.pipe(
 				switchMap(() => this.http.get<Poliza[]>(this.url)),
@@ -122,16 +131,32 @@ export class Seguros_managementComponent implements OnInit {
 				// if (!poliza.Cedula) {
 				// 	this.editProjects(employee.ProjectId, '+');
 				// }
+			});			
+		}
+		else{
+			this.http
+			.patch(this.url, poliza)
+			.pipe(
+				switchMap(() => this.http.get<Poliza[]>(this.url)),
+			)
+			.subscribe((result) => {
+				this.dataSource = new MatTableDataSource(result);
+				// if (!poliza.Cedula) {
+				// 	this.editProjects(employee.ProjectId, '+');
+				// }
 			});
+		}
+
 		this.form.patchValue({
+			idPoliza: '',
 			cedula: '',
 			nombre: '',
-			apellido: '',
+			escripcion: '',
 			fechaInicio: '',
 			periodoCobertura: '',
-      precio: '',
-      tipoCobertura: '',
-      tipoRiesgo: '',
+			precio: '',
+			tipoCobertura: '',
+			tipoRiesgo: '',
 		});
 	}
 }

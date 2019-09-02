@@ -51,6 +51,12 @@ namespace GAP.Test.Front
             services.AddScoped<IDbContext, TestContext>();
             services.AddTransient<IUnitOfWork, UnitOfWork>();
             services.AddTransient<IPolizaService, PolizaService>();
+            services.AddCors(setup => setup.AddPolicy("gaptest", builder =>
+            {
+                builder.AllowAnyOrigin()
+                       .AllowAnyHeader()
+                       .AllowAnyMethod();
+            }));
             // In production, the Angular files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {
@@ -75,7 +81,7 @@ namespace GAP.Test.Front
                 app.UseHsts();
             }
 
-
+            app.UseCors("atlas-ordermang-cors-policy");
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseSpaStaticFiles();

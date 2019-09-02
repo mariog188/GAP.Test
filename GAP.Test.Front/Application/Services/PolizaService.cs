@@ -24,9 +24,41 @@ namespace GAP.Test.Front.Application.Services
 
         public bool CreatePoliza(PolizaVM polizaVM)
         {
+            try
+            {
+                var repository = _unitOfWork.GetRepository<Domain.Model.Poliza>();
+                Domain.Model.Poliza poliza = _mapper.Map<Domain.Model.Poliza>(polizaVM);
+                repository.Add(poliza);
+                return _unitOfWork.Commit() > 0;
+            }
+            catch (Exception exc)
+            {
+
+                throw new Exception("The information sent is not valid.");
+            }
+        }
+
+        public bool UpdatePoliza(PolizaVM polizaVM)
+        {
+            try
+            {
+                var repository = _unitOfWork.GetRepository<Domain.Model.Poliza>();
+                Domain.Model.Poliza poliza = _mapper.Map<Domain.Model.Poliza>(polizaVM);
+                repository.Update(poliza);
+                return _unitOfWork.Commit() > 0;
+            }
+            catch (Exception exc)
+            {
+
+                throw new Exception("The information sent is not valid.");
+            }
+        }
+
+        public async Task<bool> DeletePoliza(int idPoliza)
+        {
             var repository = _unitOfWork.GetRepository<Domain.Model.Poliza>();
-            Domain.Model.Poliza poliza = _mapper.Map<Domain.Model.Poliza>(polizaVM);
-            repository.Add(poliza);
+            var poliza =  (await repository.GetAsync(predicate: src => src.Id.Equals(idPoliza))).FirstOrDefault();
+            repository.Delete(poliza);
             return _unitOfWork.Commit() > 0;
         }
 

@@ -30,11 +30,30 @@ namespace GAP.Test.Front.Controllers
                     StatusCode((int)HttpStatusCode.InternalServerError, "Internal error during poliza creation");
         }
 
+        [HttpPatch()]
+        [Produces("application/json")]
+        public async Task<IActionResult> UpdatePoliza(PolizaVM poliza)
+        {
+            return _polizaService.UpdatePoliza(poliza) ?
+                   Accepted("/Poliza", "Poliza was updated") :
+                    StatusCode((int)HttpStatusCode.InternalServerError, "Internal error during poliza creation");
+        }
+
         [HttpGet()]
         [Produces("application/json")]
         public async Task<List<PolizaVM>> GetAsync()
         {
             return await _polizaService.GetAsync();
+        }
+
+
+        [HttpDelete("{idPoliza}")]
+        [Produces("application/json")]
+        public async Task<IActionResult> GetAsync(int idPoliza)
+        {
+            return await _polizaService.DeletePoliza(idPoliza) ?
+                    Accepted("/Poliza", "Poliza was Deleted") :
+                    StatusCode((int)HttpStatusCode.InternalServerError, "Internal error during poliza creation");
         }
     }
 }

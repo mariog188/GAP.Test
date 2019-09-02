@@ -24,13 +24,16 @@ namespace GAP.Test.Front.Application.ViewModel
         [JsonProperty(PropertyName = "Precio")]
         public decimal Precio { get; set; }
 
-        [JsonProperty(PropertyName = "IdTipoCubrimiento")]
+        [JsonProperty(PropertyName = "TipoCobertura")]
         public int IdTipoCubrimiento { get; set; }
 
-        [JsonProperty(PropertyName = "IdTipoRiesgo")]
+        [JsonProperty(PropertyName = "TipoRiesgo")]
         public int IdTipoRiesgo { get; set; }
 
         [JsonProperty(PropertyName = "Cedula")]
-        public int Cedula { get; set; }
+        public int IdCliente { get; set; }
+
+        [JsonProperty(PropertyName = "IdPoliza")]
+        public int Id { get; set; }
     }
 }
