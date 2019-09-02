@@ -12,7 +12,7 @@ namespace GAP.Test.Front.Infrastructure.Seeds
         {
             return new List<Poliza>()
             {
-                //new Poliza() {Id = 1,  },
+                new Poliza() {Id = 1,Descripcion = "Poliza 1", IdCliente = 1, FechaInicio = new DateTime(1999,01,02), IdTipoCubrimiento =1, IdTipoRiesgo = 1, Nombre = "Poliza 1", PeriodoCobertura = 12, Precio = 123000,  },
 
             };
         }

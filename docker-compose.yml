@@ -1,0 +1,28 @@
+version: '3.4'
+
+services:
+  mariadb: 
+    container_name: AtlasMariaDB 
+    image: mariadb 
+    ports: 
+      - "3306:3306" 
+    volumes: 
+      - db_data:/var/lib/mysql 
+    restart: always 
+    environment: 
+        MYSQL_ROOT_PASSWORD: root 
+
+  gap.test.front:
+    image: ${DOCKER_REGISTRY-}gaptestfront
+    environment:
+      - ConnectionString=server=mariadb;port=3306;database=GAPDB;uid=root;pwd=root;Convert Zero Datetime=True;sslmode=none
+    links: 
+          - mariadb:mariadb 
+    depends_on: 
+            - mariadb 
+    build:
+      context: .
+      dockerfile: GAP.Test.Front/Dockerfile
+
+volumes: 
+    db_data:  

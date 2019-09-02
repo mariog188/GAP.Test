@@ -1,0 +1,22 @@
+FROM mcr.microsoft.com/dotnet/core/aspnet:2.2-stretch-slim AS base
+WORKDIR /app
+EXPOSE 80
+
+FROM mcr.microsoft.com/dotnet/core/sdk:2.2-stretch AS build
+WORKDIR /src
+COPY ["GAP.Test.Front/GAP.Test.Front.csproj", "GAP.Test.Front/"]
+COPY ["GAP.Test.Domain.Infraestructure/GAP.Test.Domain.Infraestructure.csproj", "GAP.Test.Domain.Infraestructure/"]
+COPY ["GAP.Test.Domain/GAP.Test.Domain.csproj", "GAP.Test.Domain/"]
+COPY ["GAP.Test.Domain.Core/GAP.Test.Domain.Core.csproj", "GAP.Test.Domain.Core/"]
+RUN dotnet restore "GAP.Test.Front/GAP.Test.Front.csproj"
+COPY . .
+WORKDIR "/src/GAP.Test.Front"
+RUN dotnet build "GAP.Test.Front.csproj" -c Release -o /app
+
+FROM build AS publish
+RUN dotnet publish "GAP.Test.Front.csproj" -c Release -o /app
+
+FROM base AS final
+WORKDIR /app
+COPY --from=publish /app .
+ENTRYPOINT ["dotnet", "GAP.Test.Front.dll"]

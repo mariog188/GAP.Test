@@ -62,6 +62,12 @@ namespace GAP.Test.Front.Infrastructure
                 {
                     context.TiposRiesgos.AddRange(TipoRiesgoSeed.GetSampleTipoRiesgo());
                 }
+
+
+                if (!context.Polizas.Any())
+                {
+                    context.Polizas.AddRange(PolizaSeed.GetSamplePoliza());
+                }
                 context.SaveChangesAsync();
             });
         }
