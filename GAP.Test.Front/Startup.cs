@@ -51,6 +51,7 @@ namespace GAP.Test.Front
             services.AddScoped<IDbContext, TestContext>();
             services.AddTransient<IUnitOfWork, UnitOfWork>();
             services.AddTransient<IPolizaService, PolizaService>();
+            services.AddTransient<IClienteService, ClienteService>();
             services.AddCors(setup => setup.AddPolicy("gaptest", builder =>
             {
                 builder.AllowAnyOrigin()

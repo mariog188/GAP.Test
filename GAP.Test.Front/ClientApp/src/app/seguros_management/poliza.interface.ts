@@ -9,3 +9,9 @@ export interface Poliza {
   TipoCobertura: number;
   TipoRiesgo: number;
 }
+
+export interface Cliente {
+  Nombre: string;
+  Apellido: string;
+  Cedula: number;
+}

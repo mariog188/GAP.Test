@@ -95,10 +95,14 @@
               placeholder="IdPoliza"
               formControlName="idPoliza">
     </mat-form-field>        
-    <mat-form-field floatPlaceholder="never">
-      <input matInput
-             placeholder="Cedula"
-             formControlName="cedula">
+
+    <mat-form-field>
+      <mat-label>Cliente</mat-label>
+      <mat-select [ngModelOptions]="{standalone:true}"  [(ngModel)]="selectedCliente">
+        <mat-option *ngFor="let cliente of clientes" [value]="cliente.Cedula">
+          {{cliente.Nombre}}
+        </mat-option>
+      </mat-select>
     </mat-form-field>
     <mat-form-field>
       <input matInput

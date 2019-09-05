@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Inject } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatTableDataSource } from '@angular/material';
-import { Poliza } from './poliza.interface';
+import { FormControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatTableDataSource, MatOptionModule } from '@angular/material';
+import { Poliza, Cliente } from './poliza.interface';
 import { HttpClient } from '@angular/common/http';
 import { switchMap } from 'rxjs/operators';
+
 
 @Component({
   selector: 'app-seguros_management',
@@ -12,7 +13,8 @@ import { switchMap } from 'rxjs/operators';
   styleUrls: ['./seguros_management.component.css'],
 })
 export class Seguros_managementComponent implements OnInit {
-	url =  this.baseUrl + 'api/Poliza';
+  urlpoliza = this.baseUrl + 'api/Poliza';
+  urlcliente = this.baseUrl + 'api/Cliente';
 	dataSource: MatTableDataSource<Poliza>;
 	displayedColumns: string[] = [
 	'IdPoliza'	,
@@ -26,7 +28,10 @@ export class Seguros_managementComponent implements OnInit {
     'TipoRiesgo',
     'actionsColumn',
 	];
-	poliza: Poliza;
+  poliza: Poliza;
+//   clientes$: Observable<{Cliente}>;
+	clientes: Cliente[];
+	selectedCliente: number;
 	form: FormGroup;
 	showform = false;
 	update = false;
@@ -57,33 +62,36 @@ export class Seguros_managementComponent implements OnInit {
 
 	getPolizas() {
 		this.http
-			.get<Poliza[]>(this.url)
+      .get<Poliza[]>(this.urlpoliza)
 			.subscribe((data: Poliza[]) => {
 				this.dataSource = new MatTableDataSource(data);
 			});
   }
+
+  getClientes() {
+	this.http.get(this.urlcliente).subscribe((resp: Cliente[]) => (this.clientes = resp));
+  }
   
   addPolizas() {
-		this.http.post(this.url, this.poliza);
+    this.http.post(this.urlpoliza, this.poliza);
   }
   
   deletePoliza(selectedPoliza: Poliza) {
-		const deleteurl = this.url + '/' + selectedPoliza.Cedula;
+    const deleteurl = this.urlpoliza + '/' + selectedPoliza.Cedula;
 		this.http
 			.delete<Poliza[]>(deleteurl)
 			.pipe(
-				switchMap(() => this.http.get<Poliza[]>(this.url)),
+				switchMap(() => this.http.get<Poliza[]>(this.urlpoliza)),
 			)
 			.subscribe((result) => {
 				this.dataSource = new MatTableDataSource(result);
-
-				// this.editProjects(selectedPoliza.ProjectId, '-');
 			});
 	}
 
   createNew() {
 	this.update = false;
-		this.showform = !this.showform;
+	this.showform = !this.showform;
+	this.getClientes();
   }
   
   
@@ -111,7 +119,7 @@ export class Seguros_managementComponent implements OnInit {
 	  debugger;
 		const poliza: Poliza = {
 			IdPoliza: this.form.get('idPoliza').value,
-			Cedula: this.form.get('cedula').value,
+			Cedula: this.selectedCliente,
 			Nombre: this.form.get('nombre').value,
 			Descripcion: this.form.get('descripcion').value,
 			FechaInicio: this.form.get('fechaInicio').value,
@@ -122,28 +130,22 @@ export class Seguros_managementComponent implements OnInit {
 		};
 		if (!this.update) {
 			this.http
-			.post(this.url, poliza)
+      .post(this.urlpoliza, poliza)
 			.pipe(
-				switchMap(() => this.http.get<Poliza[]>(this.url)),
+         switchMap(() => this.http.get<Poliza[]>(this.urlpoliza)),
 			)
 			.subscribe((result) => {
 				this.dataSource = new MatTableDataSource(result);
-				// if (!poliza.Cedula) {
-				// 	this.editProjects(employee.ProjectId, '+');
-				// }
 			});			
 		}
 		else{
 			this.http
-			.patch(this.url, poliza)
+      .patch(this.urlpoliza, poliza)
 			.pipe(
-				switchMap(() => this.http.get<Poliza[]>(this.url)),
+         switchMap(() => this.http.get<Poliza[]>(this.urlpoliza)),
 			)
 			.subscribe((result) => {
 				this.dataSource = new MatTableDataSource(result);
-				// if (!poliza.Cedula) {
-				// 	this.editProjects(employee.ProjectId, '+');
-				// }
 			});
 		}
 

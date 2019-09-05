@@ -17,7 +17,10 @@ namespace GAP.Test.Front.Infrastructure.Helper
             // Add as many of these lines as you need to map your objects
             CreateMap<Domain.Model.Poliza, PolizaVM>()
                 .ForMember(dest => dest.Nombre, act => act.MapFrom(src => $"{src.Cliente.Nombre} {src.Cliente.Apellido}"));
+                //.ForMember(dest => dest.IdCliente, act => act.MapFrom(src => src.IdCliente));
             CreateMap<PolizaVM, Domain.Model.Poliza>();
+            CreateMap<Domain.Model.Cliente,ClienteVM >()
+                .ForMember(dest => dest.Cedula, act => act.MapFrom(src => src.Id));
         }
     }
 }
