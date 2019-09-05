@@ -15,3 +15,13 @@ export interface Cliente {
   Apellido: string;
   Cedula: number;
 }
+
+export interface TipoCobertura {
+  Nombre: string;
+  Id: number;
+}
+
+export interface TipoRiesgo {
+  Nombre: string;
+  Id: number;
+}

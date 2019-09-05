@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Inject } from '@angular/core';
 import { FormControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatTableDataSource, MatOptionModule } from '@angular/material';
-import { Poliza, Cliente } from './poliza.interface';
+import { Poliza, Cliente, TipoCobertura, TipoRiesgo } from './poliza.interface';
 import { HttpClient } from '@angular/common/http';
 import { switchMap } from 'rxjs/operators';
 
@@ -15,6 +15,8 @@ import { switchMap } from 'rxjs/operators';
 export class Seguros_managementComponent implements OnInit {
   urlpoliza = this.baseUrl + 'api/Poliza';
   urlcliente = this.baseUrl + 'api/Cliente';
+  urltipocobertura = this.baseUrl + 'api/TipoCobertura';
+  urltiporiesgo = this.baseUrl + 'api/TipoRiesgo';
 	dataSource: MatTableDataSource<Poliza>;
 	displayedColumns: string[] = [
 	'IdPoliza'	,
@@ -31,7 +33,11 @@ export class Seguros_managementComponent implements OnInit {
   poliza: Poliza;
 //   clientes$: Observable<{Cliente}>;
 	clientes: Cliente[];
+	tiposcoberturas: TipoCobertura[];
+	tiposriesgos: TipoRiesgo[];
 	selectedCliente: number;
+	selectedTipoCobertura: number;
+	selectedTipoRiesgo: number;
 	form: FormGroup;
 	showform = false;
 	update = false;
@@ -55,8 +61,8 @@ export class Seguros_managementComponent implements OnInit {
 		precio: [ '', [ Validators.required ] ],
 			// age: [ 0, [ Validators.min(15), Validators.max(99) ] ],
 		fechaInicio: [ '', [ Validators.required ] ],
-		tipoCobertura: [ '', [ Validators.required ] ],
-		tipoRiesgo: [ '', [ Validators.required ] ],
+		tipoCobertura: [ null ],
+		tipoRiesgo:  [ null ],
 		});
   }
 
@@ -70,6 +76,14 @@ export class Seguros_managementComponent implements OnInit {
 
   getClientes() {
 	this.http.get(this.urlcliente).subscribe((resp: Cliente[]) => (this.clientes = resp));
+  }
+  
+  getTiposCoberturas() {
+	this.http.get(this.urltipocobertura).subscribe((resp: TipoCobertura[]) => (this.tiposcoberturas = resp));
+  }
+
+  getTiposRiesgos() {
+	this.http.get(this.urltiporiesgo).subscribe((resp: TipoRiesgo[]) => (this.tiposriesgos = resp));
   }
   
   addPolizas() {
@@ -92,6 +106,8 @@ export class Seguros_managementComponent implements OnInit {
 	this.update = false;
 	this.showform = !this.showform;
 	this.getClientes();
+	this.getTiposCoberturas();
+	this.getTiposRiesgos();
   }
   
   
@@ -125,8 +141,8 @@ export class Seguros_managementComponent implements OnInit {
 			FechaInicio: this.form.get('fechaInicio').value,
 			PeriodoCobertura: this.form.get('periodoCobertura').value,
 			Precio: this.form.get('precio').value,
-			TipoCobertura: this.form.get('tipoCobertura').value,
-			TipoRiesgo: this.form.get('tipoRiesgo').value,
+			TipoCobertura: this.selectedTipoCobertura,
+			TipoRiesgo: this.selectedTipoRiesgo,
 		};
 		if (!this.update) {
 			this.http

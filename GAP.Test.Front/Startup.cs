@@ -52,6 +52,9 @@ namespace GAP.Test.Front
             services.AddTransient<IUnitOfWork, UnitOfWork>();
             services.AddTransient<IPolizaService, PolizaService>();
             services.AddTransient<IClienteService, ClienteService>();
+            services.AddTransient<ITipoCoberturaService, TipoCoberturaService>();
+            services.AddTransient<ITipoRiesgoService, TipoRiesgoService>();
+            
             services.AddCors(setup => setup.AddPolicy("gaptest", builder =>
             {
                 builder.AllowAnyOrigin()

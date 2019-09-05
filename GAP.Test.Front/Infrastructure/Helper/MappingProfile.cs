@@ -21,6 +21,8 @@ namespace GAP.Test.Front.Infrastructure.Helper
             CreateMap<PolizaVM, Domain.Model.Poliza>();
             CreateMap<Domain.Model.Cliente,ClienteVM >()
                 .ForMember(dest => dest.Cedula, act => act.MapFrom(src => src.Id));
+            CreateMap<Domain.Model.TipoCubrimiento, TipoCoberturaVM>();
+            CreateMap<Domain.Model.TipoRiesgo, TipoRiesgoVM>();
         }
     }
 }

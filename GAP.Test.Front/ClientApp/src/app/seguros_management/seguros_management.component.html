@@ -132,15 +132,31 @@
              formControlName="precio">
     </mat-form-field>
     <mat-form-field>
+      <mat-label>Tipo Cobertura</mat-label>
+      <mat-select [ngModelOptions]="{standalone:true}"  [(ngModel)]="selectedTipoCobertura">
+        <mat-option *ngFor="let tipocobertura of tiposcoberturas" [value]="tipocobertura.Id">
+          {{tipocobertura.Nombre}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>    
+    <!-- <mat-form-field>
       <input matInput
              placeholder="TipoCobertura"
              formControlName="tipoCobertura">
-    </mat-form-field>
-    <mat-form-field>
+    </mat-form-field> -->
+    <!-- <mat-form-field>
       <input matInput
              placeholder="TipoRiesgo"
              formControlName="tipoRiesgo">
-    </mat-form-field>
+    </mat-form-field> -->
+    <mat-form-field>
+      <mat-label>Tipo Riesgo</mat-label>
+      <mat-select [ngModelOptions]="{standalone:true}"  [(ngModel)]="selectedTipoRiesgo">
+        <mat-option *ngFor="let tiporiesgo of tiposriesgos" [value]="tiporiesgo.Id">
+          {{tiporiesgo.Nombre}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>    
     <br>
     <br>
     <button mat-raised-button
