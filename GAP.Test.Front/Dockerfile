@@ -7,6 +7,6 @@ RUN apt-get update && \
     wget -qO- https://deb.nodesource.com/setup_9.x | bash - && \
     apt-get install -y build-essential nodejs
 # End setup
-# commit
+# commit 2
 WORKDIR /app
 EXPOSE 80
