@@ -8,5 +8,6 @@ RUN apt-get update && \
     apt-get install -y build-essential nodejs
 # End setup
 # commit 3
+# commit 4
 WORKDIR /app
 EXPOSE 80
